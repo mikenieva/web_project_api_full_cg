@@ -2,6 +2,8 @@ const express = require('express');
 
 const mongoose = require('mongoose');
 
+const { login, createUser } = require('./controllers/users');
+
 mongoose
   .connect('mongodb://localhost:27017/aroundb', {
     // useNewUrlParser: true,
@@ -30,6 +32,9 @@ const cardRoutes = require('./routes/cards');
 
 app.use(userRoutes);
 app.use(cardRoutes);
+
+app.post('/signin', login);
+app.post('/signup', createUser);
 
 app.use('*', (req, res) => {
   res.status(404).send({ message: 'Requested resource not found' });
