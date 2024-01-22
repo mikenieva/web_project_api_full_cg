@@ -1,0 +1,56 @@
+const mongoose = require('mongoose');
+const validator = require('validator');
+
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    minlength: 2,
+    maxlength: 30,
+    default: 'Jacques Cousteau',
+  },
+  about: {
+    type: String,
+    minlength: 2,
+    maxlength: 30,
+    default: 'Explorer',
+  },
+  avatar: {
+    type: String,
+    validate: {
+      validator(v) {
+        return /^(https?:\/\/)(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)$/.test(
+          v
+        );
+      },
+      message: (props) => `${props.value} is not a valid http/https!`,
+    },
+    default:
+      'https://practicum-content.s3.us-west-1.amazonaws.com/resources/moved_avatar_1604080799.jpg',
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    validate: {
+      validator: validator.isEmail,
+      message: 'Email is not valid',
+      isAsync: false,
+    },
+  },
+  password: {
+    type: String,
+    required: true,
+    minlength: 8,
+    validate: {
+      validator(v) {
+        return /^(?=.*[a-z])(?=.*[0-9])(?=.{8,})/.test(v);
+      },
+      message:
+        'Password should contain at least one letter, one number, and be at least 8 characters long',
+      isAsync: false,
+    },
+  },
+});
+
+const user = mongoose.model('user', userSchema);
+module.exports = user;
