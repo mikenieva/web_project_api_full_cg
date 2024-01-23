@@ -42,14 +42,22 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  const { cardId } = req.params;
-  Card.findByIdAndDelete(cardId)
+  Card.findById(req.params.cardId)
     .then((card) => {
-      if (card) {
-        res.send({ data: card });
-      } else {
-        res.status(404).send({ message: 'Card ID not found' });
+      if (!card) {
+        return res.status(404).send({ message: 'Card not found' });
       }
+      if (card.owner.toString() !== req.user._id) {
+        return res.status(403).send({ message: 'Forbidden' });
+      }
+      Card.deleteOne(card)
+        .then(() => res.send({ data: card }))
+        .catch(() =>
+          res
+            .status(500)
+            .send({ message: 'An error has ocurred on the server' })
+        );
+      return null;
     })
     .catch(() =>
       res.status(500).send({ message: 'An error has ocurred on the server' })
