@@ -5,19 +5,19 @@ const router = Router();
 const {
   getUsers,
   getUserById,
-  // createUser,
   updateProfile,
   updateAvatar,
+  getAuthenticatedUser,
 } = require('../controllers/users');
 
 router.get('/users', getUsers);
 
 router.get('/users/:userId', getUserById);
 
-// router.post('/users', createUser);
-
 router.patch('/users/me', updateProfile);
 
 router.patch('/users/me/avatar', updateAvatar);
+
+router.get('/users/me', getAuthenticatedUser);
 
 module.exports = router;

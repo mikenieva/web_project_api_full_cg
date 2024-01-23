@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 
 const { login, createUser } = require('./controllers/users');
 
+const auth = require('./middlewares/auth');
+
 mongoose
   .connect('mongodb://localhost:27017/aroundb', {
     // useNewUrlParser: true,
@@ -18,23 +20,17 @@ const app = express();
 
 app.use(express.json());
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '657f509c04765e4d0e310eab',
-  };
-
-  next();
-});
-
 const userRoutes = require('./routes/users');
 
 const cardRoutes = require('./routes/cards');
 
+app.post('/signup', createUser);
+app.post('/signin', login);
+
+app.use(auth);
+
 app.use(userRoutes);
 app.use(cardRoutes);
-
-app.post('/signin', login);
-app.post('/signup', createUser);
 
 app.use('*', (req, res) => {
   res.status(404).send({ message: 'Requested resource not found' });

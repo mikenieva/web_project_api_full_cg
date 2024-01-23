@@ -102,11 +102,27 @@ module.exports.login = (req, res) => {
     .then((user) => {
       // estamos creando un token
       const token = jwt.sign({ _id: user._id.toString() }, 'some-secret-key', {
-        expiresIn: '7 days',
+        expiresIn: '7d',
       });
 
       // devolvemos el token
       return res.send({ token });
     })
     .catch((err) => res.status(401).send({ message: err.message }));
+};
+
+module.exports.getAuthenticatedUser = (req, res) => {
+  const userId = req.user._id;
+
+  User.findById(userId)
+    .then((user) => {
+      if (user) {
+        res.send({ data: user });
+      } else {
+        res.status(404).send({ message: 'User not found' });
+      }
+    })
+    .catch(() =>
+      res.status(500).send({ message: 'An error has ocurred on the server' })
+    );
 };
