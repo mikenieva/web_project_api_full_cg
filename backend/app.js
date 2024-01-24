@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const { login, createUser } = require('./controllers/users');
 
-const auth = require('./middlewares/auth');
+const auth = require('./middleware/auth');
 
 mongoose
   .connect('mongodb://localhost:27017/aroundb', {
@@ -34,6 +34,17 @@ app.use(cardRoutes);
 
 app.use('*', (req, res) => {
   res.status(404).send({ message: 'Requested resource not found' });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  // si un error no tiene estado, se muestra 500
+  const { statusCode = 500, message } = err;
+  res.status(statusCode).send({
+    // comprueba el estado y muestra un mensaje basado en dicho estado
+    message:
+      statusCode === 500 ? 'Se ha producido un error en el servidor' : message,
+  });
 });
 
 app.listen(PORT, () => {

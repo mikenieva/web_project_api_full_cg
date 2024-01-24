@@ -2,53 +2,41 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-module.exports.getUsers = (req, res) => {
+const NotFoundError = require('../errors/not-found-error');
+
+module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send({ data: users }))
-    .catch(() =>
-      res.status(500).send({ message: 'An error has ocurred on the server' })
-    );
+    .catch((err) => next(err));
 };
 
-module.exports.getUserById = (req, res) => {
+module.exports.getUserById = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
     .then((user) => {
       if (user) {
         res.send({ data: user });
       } else {
-        res.status(404).send({ message: 'User ID not found' });
+        throw new NotFoundError('User ID not found');
       }
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Invalid user ID' });
-      } else {
-        res.status(500).send({ message: 'An error has ocurred on the server' });
-      }
-    });
+    .catch((err) => next(err));
 };
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => User.create({ ...req.body, password: hash }))
     .then((user) => res.send({ data: user }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Invalid user data' });
-      } else {
-        res.status(500).send({ message: 'An error has ocurred on the server' });
-      }
-    });
+    .catch((err) => next(err));
 };
 
-module.exports.updateProfile = (req, res) => {
+module.exports.updateProfile = (req, res, next) => {
   const userId = req.user._id;
   const { name, about } = req.body;
 
   if (name === undefined && about === undefined) {
-    return res.status(400).send({ message: 'No fields to update' });
+    return next(new Error('No fields to update'));
   }
 
   return User.findByIdAndUpdate(
@@ -56,25 +44,17 @@ module.exports.updateProfile = (req, res) => {
     { name, about },
     { new: true, runValidators: true }
   )
-    .orFail()
+    .orFail(new NotFoundError('User ID not found'))
     .then((user) => res.send({ data: user }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Invalid user data' });
-      } else if (err.name === 'DocumentNotFoundError') {
-        res.status(404).send({ message: 'User not found' });
-      } else {
-        res.status(500).send({ message: 'An error has ocurred on the server' });
-      }
-    });
+    .catch((err) => next(err));
 };
 
-module.exports.updateAvatar = (req, res) => {
+module.exports.updateAvatar = (req, res, next) => {
   const userId = req.user._id;
   const { avatar } = req.body;
 
   if (avatar === undefined) {
-    return res.status(400).send({ message: 'No avatar URL provided' });
+    return next(new Error('No avatar URL provided'));
   }
 
   return User.findByIdAndUpdate(
@@ -82,20 +62,12 @@ module.exports.updateAvatar = (req, res) => {
     { avatar },
     { new: true, runValidators: true }
   )
-    .orFail()
+    .orFail(new NotFoundError('User ID not found'))
     .then((user) => res.send({ data: user }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({ message: 'Invalid avatar URL' });
-      } else if (err.name === 'DocumentNotFoundError') {
-        res.status(404).send({ message: 'User not found' });
-      } else {
-        res.status(500).send({ message: 'An error has ocurred on the server' });
-      }
-    });
+    .catch((err) => next(err));
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
@@ -108,10 +80,10 @@ module.exports.login = (req, res) => {
       // devolvemos el token
       return res.send({ token });
     })
-    .catch((err) => res.status(401).send({ message: err.message }));
+    .catch((err) => next(err));
 };
 
-module.exports.getAuthenticatedUser = (req, res) => {
+module.exports.getAuthenticatedUser = (req, res, next) => {
   const userId = req.user._id;
 
   User.findById(userId)
@@ -119,10 +91,8 @@ module.exports.getAuthenticatedUser = (req, res) => {
       if (user) {
         res.send({ data: user });
       } else {
-        res.status(404).send({ message: 'User not found' });
+        throw new NotFoundError('User not found');
       }
     })
-    .catch(() =>
-      res.status(500).send({ message: 'An error has ocurred on the server' })
-    );
+    .catch((err) => next(err));
 };
