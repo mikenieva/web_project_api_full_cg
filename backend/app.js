@@ -2,9 +2,20 @@ const express = require('express');
 
 const mongoose = require('mongoose');
 
+const { errors } = require('celebrate');
+
 const { login, createUser } = require('./controllers/users');
 
 const auth = require('./middleware/auth');
+
+const { PORT = 3000 } = process.env;
+
+const userRoutes = require('./routes/users');
+const cardRoutes = require('./routes/cards');
+
+const { requestLogger, errorLogger } = require('./middleware/logger');
+
+const app = express();
 
 mongoose
   .connect('mongodb://localhost:27017/aroundb', {
@@ -14,15 +25,9 @@ mongoose
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('Failed to connect to MongoDB', err));
 
-const { PORT = 3000 } = process.env;
-
-const app = express();
-
 app.use(express.json());
 
-const userRoutes = require('./routes/users');
-
-const cardRoutes = require('./routes/cards');
+app.use(requestLogger);
 
 app.post('/signup', createUser);
 app.post('/signin', login);
@@ -36,7 +41,13 @@ app.use('*', (req, res) => {
   res.status(404).send({ message: 'Requested resource not found' });
 });
 
-// Error handling middleware
+// middleware de logs de errores
+app.use(errorLogger);
+
+// middleware de errores de celebrate
+app.use(errors());
+
+// middleware majeador central de errores
 app.use((err, req, res, next) => {
   // si un error no tiene estado, se muestra 500
   const { statusCode = 500, message } = err;
