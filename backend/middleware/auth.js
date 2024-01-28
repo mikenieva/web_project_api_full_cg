@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
   try {
     payload = jwt.verify(token, 'some-secret-key');
   } catch (err) {
-    return res.status(401).send({ message: 'Se requiere autorización' });
+    return res.status(401).send({ message: 'tambien requiere autorización' });
   }
 
   req.user = payload; // asigna el payload al objeto de solicitud
