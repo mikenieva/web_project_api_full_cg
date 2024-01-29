@@ -8,8 +8,6 @@ const cors = require('cors');
 
 require('dotenv').config();
 
-const path = require('path');
-
 const { login, createUser } = require('./controllers/users');
 
 const auth = require('./middleware/auth');
@@ -32,14 +30,6 @@ mongoose
   .catch((err) => console.error('Failed to connect to MongoDB', err));
 
 app.use(express.json());
-
-// Sirve los archivos estáticos desde el directorio build
-app.use(express.static(path.join(__dirname, 'build')));
-
-// Maneja cualquier solicitud que no coincida con las anteriores
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
 
 app.use(requestLogger);
 
