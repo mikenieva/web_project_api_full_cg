@@ -31,7 +31,7 @@ module.exports.createUser = (req, res, next) => {
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => User.create({ ...req.body, password: hash }))
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user))
     .catch((err) => next(err));
 };
 
@@ -93,6 +93,7 @@ module.exports.login = (req, res, next) => {
 
 module.exports.getAuthenticatedUser = (req, res, next) => {
   const userId = req.user._id;
+  console.log(req.user._id);
 
   User.findById(userId)
     .then((user) => {
