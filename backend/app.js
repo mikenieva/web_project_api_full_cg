@@ -39,11 +39,11 @@ app.options('*', cors());
 app.post('/signup', createUser);
 app.post('/signin', login);
 
-app.use(auth);
+// app.use(auth);
 
-app.use(userRoutes);
+app.use(userRoutes, auth);
 
-app.use(cardRoutes);
+app.use(cardRoutes, auth);
 
 app.use('*', (req, res) => {
   res.status(404).send({ message: 'Requested resource not found' });
