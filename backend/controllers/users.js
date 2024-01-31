@@ -92,10 +92,10 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.getAuthenticatedUser = (req, res, next) => {
-  const userId = req.user._id;
+  const { email } = req.body;
   console.log(req.user._id);
 
-  User.findById(userId)
+  User.findOne({ email })
     .then((user) => {
       if (user) {
         res.send({ data: user });
