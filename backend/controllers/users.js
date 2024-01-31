@@ -30,7 +30,9 @@ module.exports.getUserById = (req, res, next) => {
 module.exports.createUser = (req, res, next) => {
   bcrypt
     .hash(req.body.password, 10)
-    .then((hash) => User.create({ ...req.body, password: hash }))
+    .then((hash) =>
+      User.create({ ...req.body, password: hash, _id: req.user._id })
+    )
     .then((user) => res.send(user))
     .catch((err) => next(err));
 };
@@ -92,10 +94,10 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.getAuthenticatedUser = (req, res, next) => {
-  const { email } = req.body;
+  const userId = req.user._id;
   console.log(req.user._id);
 
-  User.findOne({ email })
+  User.findById(userId)
     .then((user) => {
       if (user) {
         res.send({ data: user });
