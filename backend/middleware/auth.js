@@ -21,7 +21,7 @@ module.exports = (req, res, next) => {
     return res.status(401).send({ message: 'tambien requiere autorización' });
   }
 
-  req.data.user = payload; // asigna el payload al objeto de solicitud
+  req.user = payload; // asigna el payload al objeto de solicitud
   next(); // envía la solicitud al siguiente middleware
   return null;
 };

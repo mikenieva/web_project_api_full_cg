@@ -92,12 +92,12 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.getAuthenticatedUser = (req, res, next) => {
-  const { _id } = req.data.user;
+  const { _id } = req.user;
 
   User.findById(_id)
     .then((user) => {
       if (user) {
-        res.send({ user });
+        res.send(user);
       } else {
         throw new NotFoundError('User not found');
       }
