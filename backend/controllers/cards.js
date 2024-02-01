@@ -10,7 +10,6 @@ module.exports.getCards = (req, res, next) => {
 };
 
 module.exports.createCard = (req, res, next) => {
-  console.log(req.user._id);
   const userId = req.user._id; // _id se volverá accesible luego de la autenticación
   const { name, link } = req.body;
 
