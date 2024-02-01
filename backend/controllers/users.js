@@ -97,7 +97,7 @@ module.exports.getAuthenticatedUser = (req, res, next) => {
   User.findById(_id)
     .then((user) => {
       if (user) {
-        res.send({ data: user });
+        res.send({ user });
       } else {
         throw new NotFoundError('User not found');
       }
