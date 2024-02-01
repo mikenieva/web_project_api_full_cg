@@ -10,7 +10,7 @@ require('dotenv').config();
 
 const { login, createUser } = require('./controllers/users');
 
-// const auth = require('./middleware/auth');
+const auth = require('./middleware/auth');
 
 const { PORT = 3000 } = process.env;
 
@@ -39,11 +39,11 @@ app.options('*', cors());
 app.post('/signup', createUser);
 app.post('/signin', login);
 
-// app.use(auth);
+app.use(auth);
 
-app.use(userRoutes);
+app.use(userRoutes, auth);
 
-app.use(cardRoutes);
+app.use(cardRoutes, auth);
 
 app.use('*', (req, res) => {
   res.status(404).send({ message: 'Requested resource not found' });
