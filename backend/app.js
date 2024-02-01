@@ -22,7 +22,7 @@ const { requestLogger, errorLogger } = require('./middleware/logger');
 const app = express();
 
 mongoose
-  .connect('mongodb://34.136.10.156', {
+  .connect('mongodb://localhost:27017/aroundb', {
     // useNewUrlParser: true,
     // useUnifiedTopology: true,
   })
