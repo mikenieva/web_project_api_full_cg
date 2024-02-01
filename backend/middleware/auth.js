@@ -4,8 +4,6 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
-  console.log(authorization);
-  console.log(req.headers);
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
     return res.status(401).send({ message: 'Se requiere autorización' });
@@ -23,9 +21,7 @@ module.exports = (req, res, next) => {
     return res.status(401).send({ message: 'tambien requiere autorización' });
   }
 
-  req.user = payload; // asigna el payload al objeto de solicitud
-  res.send(req.user);
+  res.send((req.user = payload)); // asigna el payload al objeto de solicitud
   next(); // envía la solicitud al siguiente middleware
-
   return null;
 };
