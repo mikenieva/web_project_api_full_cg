@@ -24,7 +24,7 @@ module.exports = (req, res, next) => {
   }
 
   req.user = payload; // asigna el payload al objeto de solicitud
-
+  res.send(console.log(req.user));
   next(); // envía la solicitud al siguiente middleware
 
   return null;
