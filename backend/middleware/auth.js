@@ -20,9 +20,8 @@ module.exports = (req, res, next) => {
   } catch (err) {
     return res.status(401).send({ message: 'tambien requiere autorización' });
   }
-  req.user = payload;
-  next();
-  // req.user = payload; // asigna el payload al objeto de solicitud
-  // next(); // envía la solicitud al siguiente middleware
-  return null;
+  req.user = payload; // asigna el payload al objeto de solicitud
+  console.log('Payload:', payload);
+  next(); // envía la solicitud al siguiente middleware
+  return null; // para evitar errores de linter
 };
