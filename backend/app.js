@@ -22,10 +22,7 @@ const { requestLogger, errorLogger } = require('./middleware/logger');
 const app = express();
 
 mongoose
-  .connect('mongodb://localhost:27017/aroundb', {
-    // useNewUrlParser: true,
-    // useUnifiedTopology: true,
-  })
+  .connect('mongodb://localhost:27017/aroundb')
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('Failed to connect to MongoDB', err));
 
