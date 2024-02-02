@@ -6,7 +6,7 @@ const { celebrate, Joi } = require('celebrate');
 
 const validator = require('validator');
 
-const auth = require('../middleware/auth');
+// const auth = require('../middleware/auth');
 
 const {
   getUsers,
@@ -56,6 +56,6 @@ router.patch(
   updateAvatar
 );
 
-router.get('/users/me', auth, getAuthenticatedUser);
+router.get('/users/me', getAuthenticatedUser);
 
 module.exports = router;
