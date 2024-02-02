@@ -41,9 +41,9 @@ app.post('/signin', login);
 
 // app.use(auth);
 
-app.use(auth, userRoutes);
+app.use(userRoutes);
 
-app.use(auth, cardRoutes);
+app.use(cardRoutes);
 
 app.use('*', (req, res) => {
   res.status(404).send({ message: 'Requested resource not found' });
