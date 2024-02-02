@@ -10,7 +10,7 @@ require('dotenv').config();
 
 const { login, createUser } = require('./controllers/users');
 
-const auth = require('./middleware/auth');
+// const auth = require('./middleware/auth');
 
 const { PORT = 3000 } = process.env;
 
