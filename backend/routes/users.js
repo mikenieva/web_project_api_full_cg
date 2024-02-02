@@ -6,7 +6,7 @@ const { celebrate, Joi } = require('celebrate');
 
 const validator = require('validator');
 
-// const auth = require('../middleware/auth');
+const auth = require('../middleware/auth');
 
 const {
   getUsers,
@@ -64,6 +64,7 @@ router.get(
       userId: Joi.string().alphanum().required(),
     }),
   }),
+  auth,
   getAuthenticatedUser
 );
 
