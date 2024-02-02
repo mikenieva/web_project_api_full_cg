@@ -24,12 +24,14 @@ const validateURL = (value, helpers) => {
 
 router.get('/users', getUsers);
 
+router.get('/users/me', auth, getAuthenticatedUser);
+
 router.patch(
   '/users/me',
   celebrate({
     body: Joi.object().keys({
-      name: Joi.string().min(2).max(30).required,
-      about: Joi.string().min(2).max(30).required,
+      name: Joi.string().min(2).max(30).required(),
+      about: Joi.string().min(2).max(30).required(),
     }),
   }),
   auth,
@@ -46,7 +48,5 @@ router.patch(
   auth,
   updateAvatar
 );
-
-router.get('/users/me', auth, getAuthenticatedUser);
 
 module.exports = router;
