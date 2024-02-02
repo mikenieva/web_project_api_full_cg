@@ -6,6 +6,8 @@ const { celebrate, Joi } = require('celebrate');
 
 const validator = require('validator');
 
+const auth = require('../middleware/auth');
+
 const {
   getCards,
   createCard,
@@ -31,6 +33,7 @@ router.post(
       link: Joi.string().required().custom(validateURL),
     }),
   }),
+  auth,
   createCard
 );
 
