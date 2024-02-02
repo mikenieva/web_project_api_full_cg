@@ -94,10 +94,10 @@ module.exports.login = (req, res, next) => {
 module.exports.getAuthenticatedUser = (req, res, next) => {
   console.log('User:', req.user);
   const userId = req.user._id;
-  User.findById(userId)
+  User.findById({ userId })
     .then((user) => {
       if (user) {
-        res.send(user);
+        res.send({ data: user });
       } else {
         throw new NotFoundError('User not found');
       }
