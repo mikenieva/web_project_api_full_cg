@@ -59,12 +59,12 @@ router.patch(
 
 router.get(
   '/users/me',
+  auth,
   celebrate({
     params: Joi.object().keys({
       userId: Joi.string().alphanum().required(),
     }),
   }),
-  auth,
   getAuthenticatedUser
 );
 
