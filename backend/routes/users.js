@@ -32,6 +32,7 @@ router.patch(
       about: Joi.string().min(2).max(30).required,
     }),
   }),
+  auth,
   updateProfile
 );
 
