@@ -57,15 +57,6 @@ router.patch(
   updateAvatar
 );
 
-router.get(
-  '/users/me',
-  auth,
-  celebrate({
-    params: Joi.object().keys({
-      userId: Joi.string().alphanum().required(),
-    }),
-  }),
-  getAuthenticatedUser
-);
+router.get('/users/me', auth, getAuthenticatedUser);
 
 module.exports = router;
