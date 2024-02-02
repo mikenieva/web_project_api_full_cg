@@ -10,7 +10,7 @@ const validator = require('validator');
 
 const {
   getUsers,
-  getUserById,
+  // getUserById,
   updateProfile,
   updateAvatar,
   getAuthenticatedUser,
@@ -24,7 +24,7 @@ const validateURL = (value, helpers) => {
 };
 
 router.get('/users', getUsers);
-
+/*
 router.get(
   '/users/:userId',
   celebrate({
@@ -34,6 +34,7 @@ router.get(
   }),
   getUserById
 );
+*/
 
 router.patch(
   '/users/me',
@@ -56,6 +57,14 @@ router.patch(
   updateAvatar
 );
 
-router.get('/users/me', getAuthenticatedUser);
+router.get(
+  '/users/me',
+  celebrate({
+    params: Joi.object().keys({
+      userId: Joi.string().alphanum().required(),
+    }),
+  }),
+  getAuthenticatedUser
+);
 
 module.exports = router;

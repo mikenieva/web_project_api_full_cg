@@ -14,6 +14,7 @@ module.exports.getUsers = (req, res, next) => {
     .catch((err) => next(err));
 };
 
+/*
 module.exports.getUserById = (req, res, next) => {
   const { userId } = req.params;
   User.findById(userId)
@@ -26,6 +27,7 @@ module.exports.getUserById = (req, res, next) => {
     })
     .catch((err) => next(err));
 };
+*/
 
 module.exports.createUser = (req, res, next) => {
   bcrypt
