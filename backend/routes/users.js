@@ -10,7 +10,6 @@ const auth = require('../middleware/auth');
 
 const {
   getUsers,
-  // getUserById,
   updateProfile,
   updateAvatar,
   getAuthenticatedUser,
@@ -24,17 +23,6 @@ const validateURL = (value, helpers) => {
 };
 
 router.get('/users', getUsers);
-/*
-router.get(
-  '/users/:userId',
-  celebrate({
-    params: Joi.object().keys({
-      userId: Joi.string().alphanum().required(),
-    }),
-  }),
-  getUserById
-);
-*/
 
 router.patch(
   '/users/me',
@@ -54,6 +42,7 @@ router.patch(
       avatar: Joi.string().required().custom(validateURL),
     }),
   }),
+  auth,
   updateAvatar
 );
 
