@@ -94,7 +94,7 @@ module.exports.login = (req, res, next) => {
 module.exports.getAuthenticatedUser = (req, res, next) => {
   console.log('User:', req.user);
   const userId = req.user._id;
-  User.findById({ data: [{ _id: userId }] })
+  User.findOne({ data: [{ _id: userId }] })
     .then((user) => {
       if (user) {
         res.send({ data: user });
