@@ -69,7 +69,7 @@ module.exports.updateAvatar = (req, res, next) => {
     { new: true, runValidators: true }
   )
     .orFail(new NotFoundError('User ID not found'))
-    .then((user) => res.send({ data: user }))
+    .then((user) => res.send(user.avatar))
     .catch((err) => next(err));
 };
 
