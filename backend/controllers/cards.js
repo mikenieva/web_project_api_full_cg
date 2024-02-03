@@ -4,7 +4,7 @@ const NotFoundError = require('../errors/not-found-error');
 
 module.exports.getCards = (req, res, next) => {
   Card.find({})
-
+    .sort({ createdAt: -1 })
     .orFail(() => new NotFoundError('No se ha encontrado ninguna tarjeta'))
     .then((cards) => res.send({ data: cards }))
     .catch((err) => next(err));
@@ -51,7 +51,7 @@ module.exports.likeCard = (req, res, next) => {
     { new: true }
   )
     .orFail(() => new NotFoundError('Card not found')) // si no se encuentra la tarjeta, se ejecuta el error
-    .then((card) => res.send({ data: card.likes }))
+    .then((card) => res.send({ data: card }))
     .catch((err) => next(err));
 };
 
@@ -61,6 +61,6 @@ module.exports.unlikeCard = (req, res, next) => {
 
   Card.findByIdAndUpdate(cardId, { $pull: { likes: userId } }, { new: true })
     .orFail(() => new NotFoundError('Card not found')) // si no se encuentra la tarjeta, se ejecuta el error
-    .then((card) => res.send({ data: card.likes }))
+    .then((card) => res.send({ data: card }))
     .catch((err) => next(err));
 };
