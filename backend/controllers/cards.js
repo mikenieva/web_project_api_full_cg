@@ -4,6 +4,7 @@ const NotFoundError = require('../errors/not-found-error');
 
 module.exports.getCards = (req, res, next) => {
   Card.find({})
+    .sort({ createdAt: -1 })
     .orFail(() => new NotFoundError('No se ha encontrado ninguna tarjeta'))
     .then((cards) => res.send({ data: cards }))
     .catch((err) => next(err));
