@@ -51,7 +51,7 @@ module.exports.likeCard = (req, res, next) => {
     { new: true }
   )
     .orFail(() => new NotFoundError('Card not found')) // si no se encuentra la tarjeta, se ejecuta el error
-    .then((card) => res.send({ data: card }))
+    .then((card) => res.send({ data: card.likes._id }))
     .catch((err) => next(err));
 };
 
