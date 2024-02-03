@@ -49,7 +49,7 @@ router.delete(
 );
 
 router.put(
-  '/cards/:cardId/likes',
+  '/cards/likes/:cardId',
   celebrate({
     params: Joi.object().keys({
       cardId: Joi.string().alphanum().length(24).required(),
@@ -60,7 +60,7 @@ router.put(
 );
 
 router.delete(
-  '/cards/:cardId/likes',
+  '/cards/likes/:cardId/',
   celebrate({
     params: Joi.object().keys({
       cardId: Joi.string().alphanum().length(24).required(),
