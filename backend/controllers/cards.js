@@ -51,7 +51,7 @@ module.exports.likeCard = (req, res, next) => {
     { new: true }
   )
     .orFail(() => new NotFoundError('Card not found')) // si no se encuentra la tarjeta, se ejecuta el error
-    .then((card) => res.send({ card }))
+    .then((card) => res.send(card))
     .catch((err) => next(err));
 };
 
@@ -61,6 +61,6 @@ module.exports.unlikeCard = (req, res, next) => {
 
   Card.findByIdAndUpdate(cardId, { $pull: { likes: userId } }, { new: true })
     .orFail(() => new NotFoundError('Card not found')) // si no se encuentra la tarjeta, se ejecuta el error
-    .then((card) => res.send({ card }))
+    .then((card) => res.send(card))
     .catch((err) => next(err));
 };
