@@ -44,6 +44,7 @@ router.delete(
       cardId: Joi.string().alphanum().length(24).required(),
     }),
   }),
+  auth,
   deleteCard
 );
 
