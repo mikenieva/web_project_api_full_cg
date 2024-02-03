@@ -55,6 +55,7 @@ router.put(
       cardId: Joi.string().alphanum().length(24).required(),
     }),
   }),
+  auth,
   likeCard
 );
 
@@ -65,6 +66,7 @@ router.delete(
       cardId: Joi.string().alphanum().length(24).required(),
     }),
   }),
+  auth,
   unlikeCard
 );
 
