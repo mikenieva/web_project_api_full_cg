@@ -33,7 +33,7 @@ app.use(requestLogger);
 app.use(cors());
 
 app.options('*', cors());
-
+/*
 app.use((req, res, next) => {
   const allowedOrigins = [
     'http://localhost:3000',
@@ -56,7 +56,7 @@ app.use((req, res, next) => {
   }
   return next();
 });
-
+*/
 app.post('/signup', createUser);
 app.post('/signin', login);
 
