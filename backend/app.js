@@ -39,6 +39,7 @@ app.use((req, res, next) => {
     'http://localhost:3000',
     'http://around.myremotetest.eu',
     'https://www.around.myremotetest.eu',
+    'https://api.around.myremotetest.eu',
   ];
   const { origin } = req.headers;
   if (allowedOrigins.includes(origin)) {
