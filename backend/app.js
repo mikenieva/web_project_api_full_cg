@@ -34,6 +34,28 @@ app.use(cors());
 
 app.options('*', cors());
 
+app.use((req, res, next) => {
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'http://around.myremotetest.eu',
+    'https://www.around.myremotetest.eu',
+  ];
+  const { origin } = req.headers;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  // rest of your headers
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  );
+  if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+    return res.status(200).json({});
+  }
+  return next();
+});
+
 app.post('/signup', createUser);
 app.post('/signin', login);
 
