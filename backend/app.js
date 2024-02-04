@@ -31,12 +31,11 @@ app.use(express.json());
 app.use(requestLogger);
 
 app.use(cors());
+
 app.options('*', cors());
 
 app.post('/signup', createUser);
 app.post('/signin', login);
-
-// app.use(auth);
 
 app.use(userRoutes);
 
