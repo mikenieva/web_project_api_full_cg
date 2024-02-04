@@ -1,5 +1,7 @@
 const express = require('express');
 
+const path = require('path');
+
 const mongoose = require('mongoose');
 
 const { errors } = require('celebrate');
@@ -20,6 +22,14 @@ const cardRoutes = require('./routes/cards');
 const { requestLogger, errorLogger } = require('./middleware/logger');
 
 const app = express();
+
+// Sirve los archivos estáticos desde el directorio build
+app.use(express.static(path.join(__dirname, 'build')));
+
+// Maneja cualquier otra ruta con index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
 
 mongoose
   .connect('mongodb://localhost:27017/aroundb')
