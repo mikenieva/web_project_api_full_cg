@@ -27,10 +27,10 @@ module.exports.createUser = (req, res, next) => {
           .hash(req.body.password, 10)
           .then((hash) => User.create({ ...req.body, password: hash }))
           .then((newUser) => res.send(newUser))
-          .then((err) => {
+          .catch((err) => {
             const ERROR_CODE = 400;
             if (
-              err.name === 'SomeErrorName' ||
+              err.password === 'SomeErrorPassword' ||
               err.email === 'SomeErrorEmail'
             ) {
               return res.status(ERROR_CODE).send('Invalid name or email');
