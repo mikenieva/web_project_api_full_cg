@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 const bcrypt = require('bcryptjs');
 
 const jwt = require('jsonwebtoken');
@@ -26,17 +27,20 @@ module.exports.createUser = (req, res, next) => {
           .hash(req.body.password, 10)
           .then((hash) => User.create({ ...req.body, password: hash }))
           .then((newUser) => res.send(newUser))
-          .catch((err) => next(err));
+          .catch((err) => {
+            const ERROR_CODE = 400;
+            if (
+              err.name === 'SomeErrorName' ||
+              err.email === 'SomeErrorEmail'
+            ) {
+              return res.status(ERROR_CODE).send('Invalid name or email');
+            }
+            next(err);
+            return null;
+          });
       }
     })
-    .catch((err) => {
-      const ERROR_CODE = 400;
-      if (err.name === 'SomeErrorName' || err.email === 'SomeErrorEmail') {
-        return res.status(ERROR_CODE).send('Invalid name or email');
-      }
-      next(err);
-      return null;
-    });
+    .catch((err) => next(err));
 };
 
 module.exports.updateProfile = (req, res, next) => {
