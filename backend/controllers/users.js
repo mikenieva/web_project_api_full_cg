@@ -31,7 +31,7 @@ module.exports.createUser = (req, res, next) => {
     })
     .catch((err) => {
       const ERROR_CODE = 400;
-      if (err.name === 'SomeErrorName') {
+      if (err.name === 'SomeErrorName' || err.email === 'SomeErrorEmail') {
         return res.status(ERROR_CODE).send('Invalid name or email');
       }
       next(err);
