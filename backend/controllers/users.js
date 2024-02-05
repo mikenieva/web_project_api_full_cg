@@ -30,10 +30,20 @@ module.exports.getUserById = (req, res, next) => {
 */
 
 module.exports.createUser = (req, res, next) => {
-  bcrypt
-    .hash(req.body.password, 10)
-    .then((hash) => User.create({ ...req.body, password: hash }))
-    .then((user) => res.send(user))
+  User.findOne({ email: req.body.email })
+    .then((existingUser) => {
+      if (existingUser) {
+        // User with this email already exists, return a 409
+        res.status(409).send('Email already exists');
+      } else {
+        // User does not exist, hash the password and create the user
+        bcrypt
+          .hash(req.body.password, 10)
+          .then((hash) => User.create({ ...req.body, password: hash }))
+          .then((newUser) => res.send(newUser))
+          .catch((err) => next(err));
+      }
+    })
     .catch((err) => next(err));
 };
 
