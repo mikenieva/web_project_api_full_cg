@@ -27,7 +27,7 @@ module.exports.createUser = (req, res, next) => {
           .hash(req.body.password, 10)
           .then((hash) => User.create({ ...req.body, password: hash }))
           .then((newUser) => res.send(newUser))
-          .catch((err) => {
+          .then((err) => {
             const ERROR_CODE = 400;
             if (
               err.name === 'SomeErrorName' ||
