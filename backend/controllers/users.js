@@ -14,21 +14,6 @@ module.exports.getUsers = (req, res, next) => {
     .catch((err) => next(err));
 };
 
-/*
-module.exports.getUserById = (req, res, next) => {
-  const { userId } = req.params;
-  User.findById(userId)
-    .then((user) => {
-      if (user) {
-        res.send({ data: user });
-      } else {
-        throw new NotFoundError('User ID not found');
-      }
-    })
-    .catch((err) => next(err));
-};
-*/
-
 module.exports.createUser = (req, res, next) => {
   User.findOne({ email: req.body.email })
     .then((existingUser) => {
@@ -44,7 +29,14 @@ module.exports.createUser = (req, res, next) => {
           .catch((err) => next(err));
       }
     })
-    .catch((err) => next(err));
+    .catch((err) => {
+      const ERROR_CODE = 400;
+      if (err.name === 'SomeErrorName') {
+        return res.status(ERROR_CODE).send('Invalid name or email');
+      }
+      next(err);
+      return null;
+    });
 };
 
 module.exports.updateProfile = (req, res, next) => {
