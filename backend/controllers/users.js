@@ -94,7 +94,7 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.getAuthenticatedUser = (req, res, next) => {
-  console.log('User:', req.user);
+  // console.log('User:', req.user);
   const userId = req.user._id;
   User.findById(userId)
     .then((user) => {
