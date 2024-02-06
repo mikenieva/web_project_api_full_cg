@@ -1,42 +1,32 @@
+// 1. IMPORTACIONES
 const express = require('express');
-
 const mongoose = require('mongoose');
-
 const { errors } = require('celebrate');
-
 const cors = require('cors');
-
+const { requestLogger, errorLogger } = require('./middleware/logger');
+const { login, createUser } = require('./controllers/users');
 require('dotenv').config();
 
-const { login, createUser } = require('./controllers/users');
-
-const { PORT = 3000 } = process.env;
-
-const userRoutes = require('./routes/users');
-const cardRoutes = require('./routes/cards');
-
-const { requestLogger, errorLogger } = require('./middleware/logger');
-
+// 2. CONFIGURACIONES Y MIDDLEWARES
 const app = express();
+const { PORT = 3000 } = process.env;
+app.use(express.json());
+app.use(requestLogger);
+app.use(cors());
+app.options('*', cors());
 
 mongoose
-  .connect('mongodb://localhost:27017/aroundb')
+  .connect(process.env.MONGODB_REMOTE)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('Failed to connect to MongoDB', err));
 
-app.use(express.json());
-
-app.use(requestLogger);
-
-app.use(cors());
-
-app.options('*', cors());
-
+// 3. RUTEO
+const userRoutes = require('./routes/users');
+const cardRoutes = require('./routes/cards');
 app.post('/signup', createUser);
 app.post('/signin', login);
 
 app.use(userRoutes);
-
 app.use(cardRoutes);
 
 app.use('*', (req, res) => {
@@ -60,6 +50,7 @@ app.use((err, req, res, next) => {
   });
 });
 
+// 4. ACTIVACIÓN DE SERVIDOR
 app.listen(PORT, () => {
   console.log(`App listening at port ${PORT}`);
 });
